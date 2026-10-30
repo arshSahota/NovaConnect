@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Waiting in Queue</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h2>Customer Placed In Queue</h2>
+
+    <h3>Customer Information</h3>
+
+    <p><strong>Name:</strong> {{ customer_name }}</p>
+    <p><strong>Account Number:</strong> {{ account_number }}</p>
+    <p><strong>Current Service:</strong> {{ customer_service }}</p>
+
+    <hr>
+
+    <h3>Queue Details</h3>
+
+    <p><strong>Queue:</strong> {{ queue_name }}</p>
+
+    <p>
+        No agents are currently available.
+        Your request has been placed in the queue.
+    </p>
+
+    <p>
+        <strong>Customers Waiting:</strong>
+        {{ waiting_customers }}
+    </p>
+
+    <a href="/">Submit Another Request</a>
+
+</body>
+</html>

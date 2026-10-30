@@ -38,65 +38,27 @@ def home():
 
         # No Agent Available
         if assigned_agent is None:
-
-            return f"""
-            <h2>Customer Placed In Queue</h2>
-
-            <h3>Customer Information</h3>
-
-            <p><strong>Name:</strong> {customer_name}</p>
-            <p><strong>Account Number:</strong> {account_number}</p>
-            <p><strong>Current Service:</strong> {customer_service}</p>
-
-            <hr>
-
-            <h3>Queue Details</h3>
-
-            <p><strong>Queue:</strong> {selected_queue['queue_name']}</p>
-
-            <p>
-            No agents are currently available.
-            Your request has been placed in the queue.
-            </p>
-
-            <p>
-            <strong>Customers Waiting:</strong>
-            {selected_queue['waiting_customers']}
-            </p>
-
-            <a href="/">Submit Another Request</a>
-            """
+            return render_template(
+                "queued.html",
+                customer_name = customer_name,
+                account_number = account_number,
+                customer_service = customer_service,
+                queue_name=selected_queue["queue_name"],
+                waiting_customers = selected_queue["waiting_customers"]
+            )
 
         # Agent Available
-        return f"""
-        <h2>Request Successfully Routed</h2>
-
-        <h3>Customer Information</h3>
-
-        <p><strong>Name:</strong> {customer_name}</p>
-        <p><strong>Account Number:</strong> {account_number}</p>
-        <p><strong>Current Service:</strong> {customer_service}</p>
-
-        <hr>
-
-        <h3>Routing Details</h3>
-
-        <p><strong>Support Type:</strong> {support_type}</p>
-
-        <p><strong>Assigned Queue:</strong> {selected_queue['queue_name']}</p>
-
-        <p><strong>Assigned Agent:</strong> {assigned_agent}</p>
-
-        <p>
-        This request was routed to the
-        {selected_queue['queue_name']}
-        because the customer selected
-        {support_type}.
-        </p>
-
-        <a href="/">Submit Another Request</a>
-        """
-
+        
+        return render_template(
+    "result.html",
+    customer_name=customer_name,
+    account_number=account_number,
+    customer_service=customer_service,
+    support_type=support_type,
+    queue_name=selected_queue["queue_name"],
+    assigned_agent=assigned_agent
+)
+        
     return render_template("index.html")
 
 
@@ -109,6 +71,29 @@ def get_customer(account_number):
     
     return {"error": "Customer not found"}
 
+@app.route("/queues")
+def queue_dashboard():
 
+    queue_data = []
+
+    for queue in queues.values():
+
+        available_agents = 0
+
+        for agent in queue["agents"]:
+            if agent["available"]:
+                available_agents += 1
+
+        queue_data.append({
+            "queue_name": queue["queue_name"],
+            "waiting_customers": queue["waiting_customers"],
+            "available_agents": available_agents
+        })
+
+    return render_template(
+        "dashboard.html",
+        queue_data=queue_data
+    )
+    
 if __name__ == "__main__":
     app.run(debug=True)

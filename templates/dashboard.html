@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Queue Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="navigation">
+    <a href="/" class="dashboard-button">
+        Go Back to Home Page
+    </a>
+    </div>
+    <h1>NovaConnect Queue Dashboard</h1>
+
+    {% for queue in queue_data %}
+
+        <div class="queue-card">
+
+            <h3>{{ queue.queue_name }}</h3>
+
+            <p>
+                <strong>Waiting Customers:</strong>
+                {{ queue.waiting_customers }}
+            </p>
+
+            <p>
+                <strong>Available Agents:</strong>
+                {{ queue.available_agents }}
+            </p>
+
+        </div>
+
+    {% endfor %}
+
+</body>
+</html>
